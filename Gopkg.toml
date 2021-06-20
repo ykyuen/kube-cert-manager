@@ -1,0 +1,51 @@
+[[constraint]]
+  name = "github.com/go-acme/lego"
+  version = "~1.0.1"
+
+[[override]]
+  name = "github.com/ykyuen/lego"
+  revision = "cloudflare-acmev2-fix"
+
+[[override]]
+  name = "gopkg.in/square/go-jose.v1"
+  revision = "aa2e30fdd1fe9dd3394119af66451ae790d50e0d"
+
+[[override]]
+  name = "gopkg.in/square/go-jose.v2"
+  version = "v2.6.0"
+
+[[override]]
+  name = "k8s.io/api"
+  version = "v2.0.0"
+
+[[override]]
+  name = "k8s.io/apiextensions-apiserver"
+  version = "v2.0.0"
+
+[[override]]
+  name = "k8s.io/apimachinery"
+  version = "v2.0.0"
+
+[[override]]
+  name = "k8s.io/client-go"
+  version = "v2.0.0"
+
+[[override]]
+  name = "github.com/gogo/protobuf"
+  version = "~1.1.1"
+
+[[override]]
+  name = "gopkg.in/yaml.v2"
+  version = "~2.2.1"
+
+[[override]]
+  name = "github.com/imdario/mergo"
+  version = "~0.3.6"
+
+[[override]]
+  name = "github.com/ugorji/go"
+  revision = "f1f1a805ed361a0e078bb537e4ea78cd37dcf065"
+
+[prune]
+  go-tests = true
+  unused-packages = true

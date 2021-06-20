@@ -1,3 +1,13 @@
+# About this fork
+
+As Let's Encrypt has deprecated ACMEv1, the [kube-cert-manager](https://github.com/PalmStoneGames/kube-cert-manager) no longer works. This repository has the following changes.
+
+- Make ACMEv2 works
+- Only for Cloudflare provider
+- Replace Glide with Dep
+
+---
+
 # Kubernetes Certificate Manager
 
 ## Deprecation notice: This project is deprecated in favor of [cert-manager](https://github.com/jetstack/cert-manager)

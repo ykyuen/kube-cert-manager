@@ -27,25 +27,22 @@ import (
 
 	"github.com/boltdb/bolt"
 	"github.com/pkg/errors"
-	"github.com/xenolf/lego/acme"
-	"github.com/xenolf/lego/providers/dns/azure"
-	"github.com/xenolf/lego/providers/dns/cloudflare"
-	"github.com/xenolf/lego/providers/dns/cloudxns"
-	"github.com/xenolf/lego/providers/dns/digitalocean"
-	"github.com/xenolf/lego/providers/dns/dnsimple"
-	"github.com/xenolf/lego/providers/dns/dnsmadeeasy"
-	"github.com/xenolf/lego/providers/dns/dnspod"
-	"github.com/xenolf/lego/providers/dns/dyn"
-	"github.com/xenolf/lego/providers/dns/gandi"
-	"github.com/xenolf/lego/providers/dns/gandiv5"
-	"github.com/xenolf/lego/providers/dns/googlecloud"
-	"github.com/xenolf/lego/providers/dns/linode"
-	"github.com/xenolf/lego/providers/dns/namecheap"
-	"github.com/xenolf/lego/providers/dns/ovh"
-	"github.com/xenolf/lego/providers/dns/pdns"
-	"github.com/xenolf/lego/providers/dns/rfc2136"
-	"github.com/xenolf/lego/providers/dns/route53"
-	"github.com/xenolf/lego/providers/dns/vultr"
+	"github.com/go-acme/lego/acme"
+	"github.com/ykyuen/lego/providers/dns/cloudflare"
+	// "github.com/go-acme/lego/providers/dns/digitalocean"
+	// "github.com/go-acme/lego/providers/dns/dnsimple"
+	// "github.com/go-acme/lego/providers/dns/dnsmadeeasy"
+	// "github.com/go-acme/lego/providers/dns/dnspod"
+	// "github.com/go-acme/lego/providers/dns/dyn"
+	// "github.com/go-acme/lego/providers/dns/gandi"
+	// "github.com/go-acme/lego/providers/dns/gcloud"
+	// "github.com/go-acme/lego/providers/dns/linode"
+	// "github.com/go-acme/lego/providers/dns/namecheap"
+	// "github.com/go-acme/lego/providers/dns/ovh"
+	// "github.com/go-acme/lego/providers/dns/pdns"
+	// "github.com/go-acme/lego/providers/dns/rfc2136"
+	// "github.com/go-acme/lego/providers/dns/route53"
+	// "github.com/go-acme/lego/providers/dns/vultr"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/pkg/api"
 	"k8s.io/client-go/pkg/api/unversioned"
@@ -118,55 +115,56 @@ func (p *CertProcessor) newACMEClient(acmeUser acme.User, provider string) (*acm
 			return nil, nil, errors.Wrapf(err, "Error while setting challenge provider %v for dns-01", provider)
 		}
 
-		acmeClient.ExcludeChallenges([]acme.Challenge{acme.HTTP01, acme.TLSSNI01})
+		// acmeClient.ExcludeChallenges([]acme.Challenge{acme.HTTP01, acme.TLSSNI01})
+		acmeClient.ExcludeChallenges([]acme.Challenge{acme.HTTP01})
 		return acmeClient, nil, nil
 	}
 
 	switch provider {
-	case "http":
-		acmeClient.SetHTTPAddress(":8080")
-		acmeClient.ExcludeChallenges([]acme.Challenge{acme.DNS01, acme.TLSSNI01})
-		return acmeClient, &p.HTTPLock, nil
-	case "tls":
-		acmeClient.SetTLSAddress(":8081")
-		acmeClient.ExcludeChallenges([]acme.Challenge{acme.HTTP01, acme.DNS01})
-		return acmeClient, &p.TLSLock, nil
-	case "azure":
-		return initDNSProvider(azure.NewDNSProvider())
+	// case "http":
+	// 	acmeClient.SetHTTPAddress(":8080")
+	// 	acmeClient.ExcludeChallenges([]acme.Challenge{acme.DNS01, acme.TLSSNI01})
+	// 	return acmeClient, &p.HTTPLock, nil
+	// case "tls":
+	// 	acmeClient.SetTLSAddress(":8081")
+	// 	acmeClient.ExcludeChallenges([]acme.Challenge{acme.HTTP01, acme.DNS01})
+	// 	return acmeClient, &p.TLSLock, nil
+	// case "azure":
+	// 	return initDNSProvider(azure.NewDNSProvider())
 	case "cloudflare":
 		return initDNSProvider(cloudflare.NewDNSProvider())
-	case "cloudxns":
-		return initDNSProvider(cloudxns.NewDNSProvider())
-	case "digitalocean":
-		return initDNSProvider(digitalocean.NewDNSProvider())
-	case "dnsimple":
-		return initDNSProvider(dnsimple.NewDNSProvider())
-	case "dnsmadeeasy":
-		return initDNSProvider(dnsmadeeasy.NewDNSProvider())
-	case "dnspod":
-		return initDNSProvider(dnspod.NewDNSProvider())
-	case "dyn":
-		return initDNSProvider(dyn.NewDNSProvider())
-	case "gandi":
-		return initDNSProvider(gandi.NewDNSProvider())
-	case "gandiv5":
-		return initDNSProvider(gandiv5.NewDNSProvider())
-	case "googlecloud":
-		return initDNSProvider(googlecloud.NewDNSProvider())
-	case "linode":
-		return initDNSProvider(linode.NewDNSProvider())
-	case "namecheap":
-		return initDNSProvider(namecheap.NewDNSProvider())
-	case "ovh":
-		return initDNSProvider(ovh.NewDNSProvider())
-	case "pdns":
-		return initDNSProvider(pdns.NewDNSProvider())
-	case "rfc2136":
-		return initDNSProvider(rfc2136.NewDNSProvider())
-	case "route53":
-		return initDNSProvider(route53.NewDNSProvider())
-	case "vultr":
-		return initDNSProvider(vultr.NewDNSProvider())
+	// case "cloudxns":
+	// 	return initDNSProvider(cloudxns.NewDNSProvider())
+	// case "digitalocean":
+	// 	return initDNSProvider(digitalocean.NewDNSProvider())
+	// case "dnsimple":
+	// 	return initDNSProvider(dnsimple.NewDNSProvider())
+	// case "dnsmadeeasy":
+	// 	return initDNSProvider(dnsmadeeasy.NewDNSProvider())
+	// case "dnspod":
+	// 	return initDNSProvider(dnspod.NewDNSProvider())
+	// case "dyn":
+	// 	return initDNSProvider(dyn.NewDNSProvider())
+	// case "gandi":
+	// 	return initDNSProvider(gandi.NewDNSProvider())
+	// case "gandiv5":
+	// 	return initDNSProvider(gandiv5.NewDNSProvider())
+	// case "gcloud":
+	// 	return initDNSProvider(gcloud.NewDNSProvider())
+	// case "linode":
+	// 	return initDNSProvider(linode.NewDNSProvider())
+	// case "namecheap":
+	// 	return initDNSProvider(namecheap.NewDNSProvider())
+	// case "ovh":
+	// 	return initDNSProvider(ovh.NewDNSProvider())
+	// case "pdns":
+	// 	return initDNSProvider(pdns.NewDNSProvider())
+	// case "rfc2136":
+	// 	return initDNSProvider(rfc2136.NewDNSProvider())
+	// case "route53":
+	// 	return initDNSProvider(route53.NewDNSProvider())
+	// case "vultr":
+	// 	return initDNSProvider(vultr.NewDNSProvider())
 	default:
 		return nil, nil, errors.Errorf("Unknown provider %v", provider)
 	}
@@ -502,14 +500,10 @@ func (p *CertProcessor) processCertificate(cert Certificate) (processed bool, er
 		}
 
 		// Register
-		acmeUserInfo.Registration, err = acmeClient.Register()
+		agreedToTos := true
+		acmeUserInfo.Registration, err = acmeClient.Register(agreedToTos)
 		if err != nil {
 			return false, errors.Wrapf(err, "Error while registering user for new domain %v", cert.Spec.Domain)
-		}
-
-		// Agree to TOS
-		if err := acmeClient.AgreeToTOS(); err != nil {
-			return false, errors.Wrapf(err, "Error while agreeing to acme TOS for new domain %v", cert.Spec.Domain)
 		}
 	}
 
@@ -519,17 +513,16 @@ func (p *CertProcessor) processCertificate(cert Certificate) (processed bool, er
 		acmeCert.DomainName = cert.Spec.Domain
 
 		// Obtain a cert
-		certRes, errs := acmeClient.ObtainCertificate(domains, true, nil, false)
-		for _, domain := range domains {
-			if errs[domain] != nil {
-				return false, errors.Wrapf(errs[domain], "Error while obtaining certificate for new domain %v", domain)
-			}
+		certRes, err := acmeClient.ObtainCertificate(domains, true, nil, false)
+		if err != nil {
+			// return p.NoteCertError(cert, err, "Error while obtaining certificate for new domain")
+			return false, errors.Wrapf(err, "Error while unmarshalling cert details for existing domain %v", cert.Spec.Domain)
 		}
 
 		// fill in data
 		acmeCert.Cert = certRes.Certificate
 		acmeCert.PrivateKey = certRes.PrivateKey
-		acmeCertDetails = NewACMECertDetailsFromResource(certRes)
+		acmeCertDetails = NewACMECertDetailsFromResource(*certRes)
 	} else {
 		if err := json.Unmarshal(certDetailsRaw, &acmeCertDetails); err != nil {
 			return false, errors.Wrapf(err, "Error while unmarshalling cert details for existing domain %v", cert.Spec.Domain)
@@ -540,15 +533,15 @@ func (p *CertProcessor) processCertificate(cert Certificate) (processed bool, er
 		certRes.Certificate = acmeCert.Cert
 		certRes.PrivateKey = acmeCert.PrivateKey
 
-		certRes, err = acmeClient.RenewCertificate(certRes, true, false)
+		newCertRes, err := acmeClient.RenewCertificate(certRes, true, false)
 		if err != nil {
 			return false, errors.Wrapf(err, "Error while renewing certificate for existing domain %v", cert.Spec.Domain)
 		}
 
 		// Fill in details
-		acmeCert.Cert = certRes.Certificate
-		acmeCert.PrivateKey = certRes.PrivateKey
-		acmeCertDetails = NewACMECertDetailsFromResource(certRes)
+		acmeCert.Cert = newCertRes.Certificate
+		acmeCert.PrivateKey = newCertRes.PrivateKey
+		acmeCertDetails = NewACMECertDetailsFromResource(*newCertRes)
 	}
 
 	// Serialize acmeCertDetails and acmeUserInfo
